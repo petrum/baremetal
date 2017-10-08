@@ -122,7 +122,7 @@ void uart_puts(const char* str)
 }
  
 #if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
+extern "C" /* Use C linkage for pmain. */
 #endif
 void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
 //void pmain()
