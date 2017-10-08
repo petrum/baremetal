@@ -1,133 +1,128 @@
-#include <stddef.h>
-#include <stdint.h>
- 
-// Memory-Mapped I/O output
-static inline void mmio_write(uint32_t reg, uint32_t data)
-{
-    *(volatile uint32_t*)reg = data;
-}
- 
-// Memory-Mapped I/O input
-static inline uint32_t mmio_read(uint32_t reg)
-{
-    return *(volatile uint32_t*)reg;
-}
- 
-// Loop <delay> times in a way that the compiler won't optimize away
-static inline void delay(int32_t count)
-{
-    asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
-		 : "=r"(count): [count]"0"(count) : "cc");
-}
- 
-enum
-    {
-        // The GPIO registers base address.
-        GPIO_BASE = 0x20200000, // for raspi2 & 3, 0x20200000 for raspi1
 
-        // The offsets for reach register.
- 
-        // Controls actuation of pull up/down to ALL GPIO pins.
-        GPPUD = (GPIO_BASE + 0x94),
- 
-        // Controls actuation of pull up/down for specific GPIO pin.
-        GPPUDCLK0 = (GPIO_BASE + 0x98),
- 
-        // The base address for UART.
-        UART0_BASE = 0x20201000, // for raspi2 & 3, 0x20201000 for raspi1
- 
-        // The offsets for reach register for the UART.
-        UART0_DR     = (UART0_BASE + 0x00), // write/read
-        UART0_FR     = (UART0_BASE + 0x18), // write/read ready
-        UART0_IBRD   = (UART0_BASE + 0x24), // divider
-        UART0_FBRD   = (UART0_BASE + 0x28), // fractional
-        UART0_LCRH   = (UART0_BASE + 0x2C), // enable FIFO, parity etc
-        UART0_CR     = (UART0_BASE + 0x30), // enable/disable UART
-        UART0_IMSC   = (UART0_BASE + 0x38), // mask interrupts
-        UART0_ICR    = (UART0_BASE + 0x44), // clear pending interrupts
-    };
- 
-void uart_init()
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+extern void PUT32 ( unsigned int, unsigned int );
+extern unsigned int GET32 ( unsigned int );
+extern void dummy ( unsigned int );
+
+#define GPFSEL1 0x20200004
+#define GPPUD       0x20200094
+#define GPPUDCLK0   0x20200098
+
+#define AUX_ENABLES     0x20215004
+#define AUX_MU_IO_REG   0x20215040
+#define AUX_MU_IER_REG  0x20215044
+#define AUX_MU_IIR_REG  0x20215048
+#define AUX_MU_LCR_REG  0x2021504C
+#define AUX_MU_MCR_REG  0x20215050
+#define AUX_MU_LSR_REG  0x20215054
+#define AUX_MU_MSR_REG  0x20215058
+#define AUX_MU_SCRATCH  0x2021505C
+#define AUX_MU_CNTL_REG 0x20215060
+#define AUX_MU_STAT_REG 0x20215064
+#define AUX_MU_BAUD_REG 0x20215068
+
+//GPIO14  TXD0 and TXD1
+//GPIO15  RXD0 and RXD1
+//alt function 5 for uart1
+//alt function 0 for uart0
+
+//((250,000,000/115200)/8)-1 = 270
+//------------------------------------------------------------------------
+void uart_putc ( unsigned int c )
 {
-    // Disable UART0.
-    mmio_write(UART0_CR, 0x00000000);
-    // Setup the GPIO pin 14 && 15.
- 
-    // Disable pull up/down for all GPIO pins & delay for 150 cycles.
-    mmio_write(GPPUD, 0x00000000);
-    delay(150);
- 
-    // Disable pull up/down for pin 14, 15 & delay for 150 cycles.
-    mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
-    delay(150);
- 
-    // Write 0 to GPPUDCLK0 to make it take effect.
-    mmio_write(GPPUDCLK0, 0x00000000);
- 
-    // Clear pending interrupts.
-    mmio_write(UART0_ICR, 0x7FF);
- 
-    // Set integer & fractional part of baud rate.
-    // Divider = UART_CLOCK/(16 * Baud)
-    // Fraction part register = (Fractional part * 64) + 0.5
-    // UART_CLOCK = 3000000; Baud = 115200.
- 
-    // Divider = 3000000 / (16 * 115200) = 1.627 = ~1.
-    mmio_write(UART0_IBRD, 1);
-    // Fractional part register = (.627 * 64) + 0.5 = 40.6 = ~40.
-    mmio_write(UART0_FBRD, 40);
- 
-    // Enable FIFO & 8 bit data transmissio (1 stop bit, no parity).
-    mmio_write(UART0_LCRH, (1 << 4) | (1 << 5) | (1 << 6));
- 
-    // Mask all interrupts.
-    mmio_write(UART0_IMSC, (1 << 1) | (1 << 4) | (1 << 5) | (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10));
- 
-    // Enable UART0, receive & transfer part of UART.
-    mmio_write(UART0_CR, (1 << 0) | (1 << 8) | (1 << 9));
-}
- 
-void uart_putc(unsigned char c)
-{
-    // Wait for UART to become ready to transmit.
-    while (mmio_read(UART0_FR) & (1 << 5))
+    while(1)
     {
+        if(GET32(AUX_MU_LSR_REG)&0x20) break;
     }
-    mmio_write(UART0_DR, c);
+    PUT32(AUX_MU_IO_REG,c);
 }
- 
-unsigned char uart_getc()
+//------------------------------------------------------------------------
+void hexstrings ( unsigned int d )
 {
-    // Wait for UART to have received something.
-    while (mmio_read(UART0_FR) & (1 << 4))
+    //unsigned int ra;
+    unsigned int rb;
+    unsigned int rc;
+
+    rb=32;
+    while(1)
     {
+        rb-=4;
+        rc=(d>>rb)&0xF;
+        if(rc>9) rc+=0x37; else rc+=0x30;
+        uart_putc(rc);
+        if(rb==0) break;
     }
-    return mmio_read(UART0_DR);
+    uart_putc(0x20);
 }
- 
-void uart_puts(const char* str)
+//------------------------------------------------------------------------
+void hexstring ( unsigned int d )
 {
-    for (size_t i = 0; str[i] != '\0'; i ++)
+    hexstrings(d);
+    uart_putc(0x0D);
+    uart_putc(0x0A);
+}
+//------------------------------------------------------------------------
+int notmain ( unsigned int earlypc )
+{
+    unsigned int ra;
+
+    PUT32(AUX_ENABLES,1);
+    PUT32(AUX_MU_IER_REG,0);
+    PUT32(AUX_MU_CNTL_REG,0);
+    PUT32(AUX_MU_LCR_REG,3);
+    PUT32(AUX_MU_MCR_REG,0);
+    PUT32(AUX_MU_IER_REG,0);
+    PUT32(AUX_MU_IIR_REG,0xC6);
+    PUT32(AUX_MU_BAUD_REG,270);
+
+    ra=GET32(GPFSEL1);
+    ra&=~(7<<12); //gpio14
+    ra|=2<<12;    //alt5
+    ra&=~(7<<15); //gpio15
+    ra|=2<<15;    //alt5
+    PUT32(GPFSEL1,ra);
+   
+    PUT32(GPPUD,0);
+    for(ra=0;ra<150;ra++) dummy(ra);
+    PUT32(GPPUDCLK0,(1<<14)|(1<<15));
+    for(ra=0;ra<150;ra++) dummy(ra);
+    PUT32(GPPUDCLK0,0);
+    
+    PUT32(AUX_MU_CNTL_REG,3);
+
+    hexstring(0x12345678);
+    hexstring(earlypc);
+
+    while(1)
     {
-        uart_putc((unsigned char)str[i]);
-        delay(1000);
+        while(1)
+        {
+            if(GET32(AUX_MU_LSR_REG)&0x01) break;
+        }
+        ra=GET32(AUX_MU_IO_REG);
+        //while(1)
+        //{
+            //if(GET32(AUX_MU_LSR_REG)&0x20) break;
+        //}
+        PUT32(AUX_MU_IO_REG,ra);
     }
+
+    return(0);
 }
- 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for pmain. */
-#endif
-void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
-//void pmain()
-{
-    // Declare as unused
-    (void) r0;
-    (void) r1;
-    (void) atags;
- 
-    uart_init();
-    uart_puts("Hello, kernel World!\r\n");
- 
-    while (1)
-        uart_putc(uart_getc());
-}
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------------
+//
+// Copyright (c) 2012 David Welch dwelch@dwelch.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+//-------------------------------------------------------------------------

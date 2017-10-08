@@ -1,42 +1,34 @@
-// To keep this in the first portion of the binary.
-.section ".text.boot"
- 
-// Make _start global.
+
 .globl _start
- 
-// Entry point for the kernel.
-// r15 -> should begin execution at 0x8000.
-// r0 -> 0x00000000
-// r1 -> 0x00000C42
-// r2 -> 0x00000100 - start of ATAGS
-// preserve these registers as argument for kernel_main
 _start:
-	// Setup the stack.
-	mov sp, #0x8000
- 
-	// Clear out bss.
-	ldr r4, =__bss_start
-	ldr r9, =__bss_end
-	mov r5, #0
-	mov r6, #0
-	mov r7, #0
-	mov r8, #0
-	b       2f
- 
-1:
-	// store multiple at r4.
-	stmia r4!, {r5-r8}
- 
-	// If we are still below bss_end, loop.
-2:
-	cmp r4, r9
-	blo 1b
- 
-	// Call kernel_main
-	ldr r3, =pmain
-	blx r3
- 
-	// halt
-halt:
-	wfe
-	b halt
+    mov sp,#0x8000
+    mov r0,pc
+    bl notmain
+hang: b hang
+
+.globl PUT32
+PUT32:
+    str r1,[r0]
+    bx lr
+
+.globl GET32
+GET32:
+    ldr r0,[r0]
+    bx lr
+
+.globl dummy
+dummy:
+    bx lr
+
+
+;@-------------------------------------------------------------------------
+;@
+;@ Copyright (c) 2012 David Welch dwelch@dwelch.com
+;@
+;@ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+;@
+;@ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+;@
+;@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;@
+;@-------------------------------------------------------------------------
