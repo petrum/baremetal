@@ -118,7 +118,10 @@ unsigned char uart_getc()
 void uart_puts(const char* str)
 {
     for (size_t i = 0; str[i] != '\0'; i ++)
+    {
         uart_putc((unsigned char)str[i]);
+        delay(1000);
+    }
 }
  
 #if defined(__cplusplus)
@@ -136,5 +139,5 @@ void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
     uart_puts("Hello, kernel World!\r\n");
  
     while (1)
-        uart_putc(uart_getc());
+        uart_puts("a");//uart_putc(uart_getc());
 }

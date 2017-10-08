@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 ./clean.sh
 
 arm-none-eabi-gcc -std=gnu99 -Wall -Wextra -O2 -nostdlib -nostartfiles -ffreestanding  -c pmain.c
