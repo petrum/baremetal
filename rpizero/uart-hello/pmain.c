@@ -55,8 +55,7 @@ void send_string(const char *s)
 {
     while(*s)
     {
-        uart_send(*s);
-        s++;
+        uart_send(*s++);
     }
 }
 
