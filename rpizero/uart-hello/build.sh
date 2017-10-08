@@ -1,9 +1,8 @@
 #!/bin/bash
 
-arm-none-eabi-gcc -Wall -O2 -nostdlib -nostartfiles -ffreestanding  -c pmain.c
-arm-none-eabi-as start.asm -o start.o
+arm-none-eabi-gcc -std=gnu99 -Wall -Wextra -O2 -nostdlib -nostartfiles -ffreestanding  -c pmain.c
+arm-none-eabi-as -c start.asm -o start.o
 
 # the order of *.o is important
-arm-none-eabi-ld start.o pmain.o -o uart-hello.elf
+arm-none-eabi-ld -T boot.ld -o uart-hello.elf -O2 -nostdlib start.o pmain.o
 arm-none-eabi-objcopy uart-hello.elf -O binary uart-hello.bin
-
