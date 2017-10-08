@@ -1,9 +1,31 @@
+#include <stddef.h>
+#include <stdint.h>
+
+static inline void delay(int32_t count)
+{
+  asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+               : : [count]"r"(count) : "cc");
+}
+
+static inline void mmio_write(uint32_t reg, uint32_t data)
+{
+  uint32_t *ptr = (uint32_t*) reg;
+  asm volatile("str %[data], [%[reg]]" : : [reg]"r"(ptr), [data]"r"(data));
+}
+
+static inline uint32_t mmio_read(uint32_t reg)
+{
+  uint32_t *ptr = (uint32_t*)reg;
+  uint32_t data;
+  asm volatile("ldr %[data], [%[reg]]" : [data]"=r"(data) : [reg]"r"(ptr));
+  return data;
+}
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-extern void PUT32 ( unsigned int, unsigned int );
-extern unsigned int GET32 ( unsigned int );
+//extern void PUT32 ( unsigned int, unsigned int );
+//extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
 
 #define GPFSEL1 0x20200004
@@ -34,9 +56,9 @@ void uart_putc ( unsigned int c )
 {
     while(1)
     {
-        if(GET32(AUX_MU_LSR_REG)&0x20) break;
+        if(mmio_read(AUX_MU_LSR_REG)&0x20) break;
     }
-    PUT32(AUX_MU_IO_REG,c);
+    mmio_write(AUX_MU_IO_REG,c);
 }
 //------------------------------------------------------------------------
 void hexstrings ( unsigned int d )
@@ -68,29 +90,29 @@ int notmain ( unsigned int earlypc )
 {
     unsigned int ra;
 
-    PUT32(AUX_ENABLES,1);
-    PUT32(AUX_MU_IER_REG,0);
-    PUT32(AUX_MU_CNTL_REG,0);
-    PUT32(AUX_MU_LCR_REG,3);
-    PUT32(AUX_MU_MCR_REG,0);
-    PUT32(AUX_MU_IER_REG,0);
-    PUT32(AUX_MU_IIR_REG,0xC6);
-    PUT32(AUX_MU_BAUD_REG,270);
+    mmio_write(AUX_ENABLES,1);
+    mmio_write(AUX_MU_IER_REG,0);
+    mmio_write(AUX_MU_CNTL_REG,0);
+    mmio_write(AUX_MU_LCR_REG,3);
+    mmio_write(AUX_MU_MCR_REG,0);
+    mmio_write(AUX_MU_IER_REG,0);
+    mmio_write(AUX_MU_IIR_REG,0xC6);
+    mmio_write(AUX_MU_BAUD_REG,270);
 
-    ra=GET32(GPFSEL1);
+    ra=mmio_read(GPFSEL1);
     ra&=~(7<<12); //gpio14
     ra|=2<<12;    //alt5
     ra&=~(7<<15); //gpio15
     ra|=2<<15;    //alt5
-    PUT32(GPFSEL1,ra);
+    mmio_write(GPFSEL1,ra);
    
-    PUT32(GPPUD,0);
+    mmio_write(GPPUD,0);
     for(ra=0;ra<150;ra++) dummy(ra);
-    PUT32(GPPUDCLK0,(1<<14)|(1<<15));
+    mmio_write(GPPUDCLK0,(1<<14)|(1<<15));
     for(ra=0;ra<150;ra++) dummy(ra);
-    PUT32(GPPUDCLK0,0);
+    mmio_write(GPPUDCLK0,0);
     
-    PUT32(AUX_MU_CNTL_REG,3);
+    mmio_write(AUX_MU_CNTL_REG,3);
 
     hexstring(0x12345678);
     hexstring(earlypc);
@@ -99,14 +121,14 @@ int notmain ( unsigned int earlypc )
     {
         while(1)
         {
-            if(GET32(AUX_MU_LSR_REG)&0x01) break;
+            if(mmio_read(AUX_MU_LSR_REG)&0x01) break;
         }
-        ra=GET32(AUX_MU_IO_REG);
+        ra=mmio_read(AUX_MU_IO_REG);
         //while(1)
         //{
-            //if(GET32(AUX_MU_LSR_REG)&0x20) break;
+            //if(mmio_read(AUX_MU_LSR_REG)&0x20) break;
         //}
-        PUT32(AUX_MU_IO_REG,ra);
+        mmio_write(AUX_MU_IO_REG,ra);
     }
 
     return(0);
