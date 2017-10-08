@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm *.o *.elf
+rm -fr *.o *.elf
 
