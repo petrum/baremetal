@@ -37,15 +37,14 @@ enum
         UART0_BASE = 0x20201000, // for raspi2 & 3, 0x20201000 for raspi1
  
         // The offsets for reach register for the UART.
-        UART0_DR     = (UART0_BASE + 0x00),
-        UART0_FR     = (UART0_BASE + 0x18),
-        UART0_IBRD   = (UART0_BASE + 0x24),
-        UART0_FBRD   = (UART0_BASE + 0x28),
-        UART0_LCRH   = (UART0_BASE + 0x2C),
-        UART0_CR     = (UART0_BASE + 0x30),
-        UART0_IMSC   = (UART0_BASE + 0x38),
-        UART0_MIS    = (UART0_BASE + 0x40),
-        UART0_ICR    = (UART0_BASE + 0x44),
+        UART0_DR     = (UART0_BASE + 0x00), // write/read
+        UART0_FR     = (UART0_BASE + 0x18), // write/read ready
+        UART0_IBRD   = (UART0_BASE + 0x24), // divider
+        UART0_FBRD   = (UART0_BASE + 0x28), // fractional
+        UART0_LCRH   = (UART0_BASE + 0x2C), // enable FIFO, parity etc
+        UART0_CR     = (UART0_BASE + 0x30), // enable/disable UART
+        UART0_IMSC   = (UART0_BASE + 0x38), // mask interrupts
+        UART0_ICR    = (UART0_BASE + 0x44), // clear pending interrupts
     };
  
 void uart_init()
