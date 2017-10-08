@@ -25,8 +25,6 @@ enum
         // The GPIO registers base address.
         GPIO_BASE = 0x20200000, // for raspi2 & 3, 0x20200000 for raspi1
 
-
-        
         // The offsets for reach register.
  
         // Controls actuation of pull up/down to ALL GPIO pins.
@@ -141,5 +139,5 @@ void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
     uart_puts("Hello, kernel World!\r\n");
  
     while (1)
-        uart_puts("a");//uart_putc(uart_getc());
+        uart_putc(uart_getc());
 }
