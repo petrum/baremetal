@@ -124,12 +124,13 @@ void uart_puts(const char* str)
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
-void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
+//void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
+void pmain()
 {
     // Declare as unused
-    (void) r0;
-    (void) r1;
-    (void) atags;
+    //(void) r0;
+    //(void) r1;
+    //(void) atags;
  
     uart_init();
     uart_puts("Hello, kernel World!\r\n");
