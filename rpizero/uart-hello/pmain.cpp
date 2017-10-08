@@ -1,4 +1,4 @@
-int mail()
+int pmain()
 {
     return 0;
 }
