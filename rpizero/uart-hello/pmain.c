@@ -67,7 +67,7 @@ void uart_init()
     mmio_write(GPPUD, 0x00000000);
     delay(150);
  
-    // Disable pull up/down for pin 14,15 & delay for 150 cycles.
+    // Disable pull up/down for pin 14, 15 & delay for 150 cycles.
     mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
     delay(150);
  
@@ -124,13 +124,13 @@ void uart_puts(const char* str)
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
-//void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
-void pmain()
+void pmain(uint32_t r0, uint32_t r1, uint32_t atags)
+//void pmain()
 {
     // Declare as unused
-    //(void) r0;
-    //(void) r1;
-    //(void) atags;
+    (void) r0;
+    (void) r1;
+    (void) atags;
  
     uart_init();
     uart_puts("Hello, kernel World!\r\n");
