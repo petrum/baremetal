@@ -24,7 +24,9 @@ enum
     {
         // The GPIO registers base address.
         GPIO_BASE = 0x20200000, // for raspi2 & 3, 0x20200000 for raspi1
- 
+
+
+        
         // The offsets for reach register.
  
         // Controls actuation of pull up/down to ALL GPIO pins.
