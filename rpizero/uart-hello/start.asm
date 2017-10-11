@@ -1,4 +1,3 @@
-
 .globl _start
 _start:
     mov sp,#0x8000
@@ -19,3 +18,4 @@ GET32:
 .globl dummy
 dummy:
     bx lr
+
