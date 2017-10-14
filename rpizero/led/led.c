@@ -1,14 +1,18 @@
+void delay(int i)
+{
+    for(volatile int tim = 0; tim < i; tim++)
+        ;   
+}
+
 int main(void)
 {
     unsigned int* gpio = (unsigned int*)0x20200000;
     volatile unsigned int tim;
     while (1)
     {
-        for(tim = 0; tim < 5000000; tim++)
-            ;
+        delay(5000000);
         gpio[8] = (1 << 15); // LED off
-        for(tim = 0; tim < 20000000; tim++)
-            ;
+        delay(20000000);
         gpio[11] = (1 << 15); // LED on
     }
 }
