@@ -4,15 +4,50 @@ void delay(int i)
         ;   
 }
 
+void shortDelay()
+{
+    delay(10000000);
+}
+
+void longDelay()
+{
+    delay(30000000);
+}
+
+volatile unsigned int* gpio;
+
+void off()
+{
+    gpio[8] = (1 << 15); // LED off
+}
+
+void on()
+{
+    gpio[11] = (1 << 15); // LED on
+}
+
+void sos()
+{
+    on(); shortDelay(); off(); shortDelay(); 
+    on(); shortDelay(); off(); shortDelay(); 
+    on(); shortDelay(); off(); longDelay();
+    
+    on(); longDelay(); off(); shortDelay(); 
+    on(); longDelay(); off(); shortDelay(); 
+    on(); longDelay(); off(); longDelay();
+    
+    on(); shortDelay(); off(); shortDelay(); 
+    on(); shortDelay(); off(); shortDelay(); 
+    on(); shortDelay(); off(); longDelay();    
+}
+
 int main(void)
 {
-    unsigned int* gpio = (unsigned int*)0x20200000;
-    volatile unsigned int tim;
+    gpio = (unsigned int*)0x20200000;
     while (1)
     {
-        delay(5000000);
-        gpio[8] = (1 << 15); // LED off
-        delay(20000000);
-        gpio[11] = (1 << 15); // LED on
+        sos();
+        longDelay();
+        longDelay();
     }
 }
