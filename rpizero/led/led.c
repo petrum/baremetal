@@ -1,5 +1,5 @@
-static volatile unsigned int* gpio;
-static volatile unsigned int tim;
+volatile unsigned int* gpio;
+volatile unsigned int tim;
 
 int main(void)
 {
