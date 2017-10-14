@@ -22,10 +22,10 @@ void uart_putc(unsigned int c)
 {
     while (1)
     {
-        if(GET32(AUX_MU_LSR_REG) & 0x20)
+        if (GET32(AUX_MU_LSR_REG) & 0x20)
             break;
     }
-    PUT32(AUX_MU_IO_REG,c);
+    PUT32(AUX_MU_IO_REG, c);
 }
 
 void hexstrings(unsigned int d)
@@ -41,7 +41,7 @@ void hexstrings(unsigned int d)
         if (rc > 9)
             rc += 0x37;
         else
-            rc+=0x30;
+            rc += 0x30;
         uart_putc(rc);
         if (rb == 0)
             break;
@@ -84,8 +84,7 @@ int notmain(unsigned int earlypc)
     for (ra = 0; ra < 150; ra++)
         dummy(ra);
     //delay(150);
-    PUT32(GPPUDCLK0, 0);
-    
+    PUT32(GPPUDCLK0, 0);    
     PUT32(AUX_MU_CNTL_REG, 3);
 
     hexstring(0x12345678);
