@@ -30,15 +30,15 @@ void sos()
 {
     on(); shortDelay(); off(); shortDelay(); 
     on(); shortDelay(); off(); shortDelay(); 
-    on(); shortDelay(); off(); longDelay();
+    on(); shortDelay(); off(); shortDelay();
     
     on(); longDelay(); off(); shortDelay(); 
     on(); longDelay(); off(); shortDelay(); 
-    on(); longDelay(); off(); longDelay();
+    on(); longDelay(); off(); shortDelay();
     
     on(); shortDelay(); off(); shortDelay(); 
     on(); shortDelay(); off(); shortDelay(); 
-    on(); shortDelay(); off(); longDelay();    
+    on(); shortDelay(); off(); shortDelay();    
 }
 
 int main(void)
