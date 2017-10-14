@@ -1,9 +1,6 @@
 //unsigned int* gpio = (unsigned int*)0x20200000; // this lines makes the binary file huge!
-//volatile unsigned int* gpio; // you need 'volatile' if you use optimization (e.g. '-O3')
-//volatile unsigned int tim;
-
-unsigned int* gpio;
-unsigned int tim;
+volatile unsigned int* gpio; // you need 'volatile' if you use optimization (e.g. '-O3')
+volatile unsigned int tim;
 
 int main(void)
 {
