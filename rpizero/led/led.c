@@ -1,5 +1,5 @@
-volatile unsigned int* gpio;
-volatile unsigned int tim;
+unsigned int* gpio;
+unsigned int tim;
 
 int main(void)
 {
