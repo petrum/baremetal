@@ -5,12 +5,6 @@ int main(void) __attribute__((naked));
 int main(void)
 {
     gpio = (unsigned int*)0x20200000;
-    unsigned int ra;
-    ra = gpio[4];
-    ra &= ~(7<<21);
-    ra |= 1<<21;
-    gpio[4] = ra;
-
     while (1)
     {
         for(tim = 0; tim < 5000000; tim++)
