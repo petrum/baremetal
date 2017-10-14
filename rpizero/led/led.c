@@ -2,9 +2,14 @@
 volatile unsigned int* gpio; // you need 'volatile' if you use optimization (e.g. '-O3')
 volatile unsigned int tim;
 
-int main(void)
+void init()
 {
     gpio = (unsigned int*)0x20200000;
+}
+
+int main(void)
+{
+    init();
     while (1)
     {
         for(tim = 0; tim < 5000000; tim++)
