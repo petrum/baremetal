@@ -1,3 +1,4 @@
+//unsigned int* gpio = (unsigned int*)0x20200000; // this lines makes the binary file huge!
 unsigned int* gpio;
 unsigned int tim;
 
