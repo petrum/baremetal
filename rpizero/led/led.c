@@ -9,9 +9,9 @@ int main(void)
     {
         for(tim = 0; tim < 5000000; tim++)
             ;
-        gpio[8] = (1 << 15);
-        for(tim = 0; tim < 5000000; tim++)
+        gpio[8] = (1 << 15); // LED off
+        for(tim = 0; tim < 20000000; tim++)
             ;
-        gpio[11] = (1 << 15);
+        gpio[11] = (1 << 15); // LED on
     }
 }
