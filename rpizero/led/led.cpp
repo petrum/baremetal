@@ -38,7 +38,9 @@ void line()
 
 void sos()
 {
-    dot(); dot(); dot(); line(); line(); line(); dot(); dot(); dot();
+    dot(); dot(); dot();
+    line(); line(); line();
+    dot(); dot(); dot();
 }
 
 int main(void)
