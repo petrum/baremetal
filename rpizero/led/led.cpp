@@ -46,8 +46,8 @@ int main(void)
     gpio = (unsigned int*)0x20200000;
     while (1)
     {
-        longDelay();
-        longDelay();
         sos();
+        longDelay();
+        longDelay();
     }
 }
