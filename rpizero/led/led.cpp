@@ -43,7 +43,7 @@ void sos()
     dot(); dot(); dot();
 }
 
-int main(void) __attribute__((naked));
+int main(void) __attribute__((naked)); // w/o this doesn't work when booted directly (no u-boot)
 int main(void)
 {
     gpio = (unsigned int*)0x20200000;
