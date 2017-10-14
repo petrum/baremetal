@@ -1,7 +1,6 @@
 volatile unsigned int* gpio;
 volatile unsigned int tim;
 
-int main(void) __attribute__((naked));
 int main(void)
 {
     gpio = (unsigned int*)0x20200000;
