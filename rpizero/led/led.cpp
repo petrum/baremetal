@@ -26,19 +26,19 @@ void on()
     gpio[11] = (1 << 15);
 }
 
-void sos()
+void dot()
 {
     on(); shortDelay(); off(); shortDelay(); 
-    on(); shortDelay(); off(); shortDelay(); 
-    on(); shortDelay(); off(); shortDelay();
-    
+}
+
+void line()
+{
     on(); longDelay(); off(); shortDelay(); 
-    on(); longDelay(); off(); shortDelay(); 
-    on(); longDelay(); off(); shortDelay();
-    
-    on(); shortDelay(); off(); shortDelay(); 
-    on(); shortDelay(); off(); shortDelay(); 
-    on(); shortDelay(); off(); shortDelay();    
+}
+
+void sos()
+{
+    dot(); dot(); dot(); line(); line(); line(); dot(); dot(); dot();
 }
 
 int main(void)
@@ -46,8 +46,8 @@ int main(void)
     gpio = (unsigned int*)0x20200000;
     while (1)
     {
+        longDelay();
+        longDelay();
         sos();
-        longDelay();
-        longDelay();
     }
 }
