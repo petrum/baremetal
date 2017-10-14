@@ -18,12 +18,12 @@ volatile unsigned int* gpio;
 
 void off()
 {
-    gpio[8] = (1 << 15); // LED off
+    gpio[8] = (1 << 15);
 }
 
 void on()
 {
-    gpio[11] = (1 << 15); // LED on
+    gpio[11] = (1 << 15);
 }
 
 void sos()
