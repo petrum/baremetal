@@ -43,14 +43,19 @@ inline GPIO::Mode GPIO::setMode(int i, Mode m)
 
 void GPIO::on(int i)
 {
-    gpio_[11] = 1 << (47 - 32);
+    // pag. 90 in the BCM2835 ARM Peripherals doc
+    if (i < 32)
+        gpio_[10] = 1 << i;
+    else
+        gpio_[11] = 1 << (i - 32);
 }
 
 void GPIO::off(int i)
 {
-    // the activity LED (green) is connected to GPIO 47
-    gpio_[8] = 1 << (47 - 32);
+    if (i < 32)
+        gpio_[7] = 1 << i;
+    else
+        gpio_[8] = 1 << (i - 32);
 }
 
 #endif
-

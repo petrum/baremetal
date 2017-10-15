@@ -72,6 +72,7 @@ int main(void)
     enableL1Cache();
 
     GPIO::init(0x20200000);
+    // the activity LED (green) is connected to GPIO 47
     GPIO::setMode(47, GPIO::Out);
     while (true)
     {
