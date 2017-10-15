@@ -34,7 +34,7 @@ inline GPIO::Mode GPIO::setMode(int i, Mode m)
     // In == 0, Out == 1, ALT0-ALT5 from 2 to 7 (total of 8, of three available bits)
     int wIndex = i / 10;
     int bIndex = (i % 10) * 3;
-    gpio_[wIndex] = (gpio_[wIndex] & ~(7 << bIndex)) | 1 << bIndex;
+    gpio_[wIndex] = (gpio_[wIndex] & ~(7 << bIndex)) | m << bIndex;
     // FSEL35 (GPFSEL3[15-17]) = 0 (GPIO In - [Low]): 
 }
 
