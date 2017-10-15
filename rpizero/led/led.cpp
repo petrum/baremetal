@@ -11,19 +11,21 @@ void shortDelay()
 
 void longDelay()
 {
-    delay(30000000);
+    for (int i = 0; i != 3; ++i)
+        shortDelay();
 }
 
 volatile unsigned int* gpio;
 
 void off()
 {
-    gpio[8] = (1 << 15);
+    // the activity LED (green) is connected to GPIO 47
+    gpio[8] = 1 << (47 - 32);
 }
 
 void on()
 {
-    gpio[11] = (1 << 15);
+    gpio[11] = 1 << (47 - 32);
 }
 
 void dot()
