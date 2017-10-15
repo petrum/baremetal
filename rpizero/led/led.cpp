@@ -59,7 +59,7 @@ void enableL1Cache()
     asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
 }
 
-int main(void) __attribute__((naked)); // w/o this doesn't work when booted directly (no u-boot)
+int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
 int main(void)
 {
     gpio = (unsigned int*)0x20200000;
