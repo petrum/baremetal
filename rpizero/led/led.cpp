@@ -48,21 +48,30 @@ void sos()
 #define ARM_CONTROL_BRANCH_PREDICTION	   (1 << 11)
 #define ARM_CONTROL_L1_INSTRUCTION_CACHE   (1 << 12)
 
+void enableL1Cache()
+{
+    unsigned int nControl;
+    asm volatile ("mrc p15, 0, %0, c1, c0,  0" : "=r" (nControl));
+    nControl |= (1 << 11) | (1 << 12);
+    asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
+}
+
+void enableBranchPrediction()
+{
+    unsigned int nAuxControl;
+    asm volatile ("mrc p15, 0, %0, c1, c0,  1" : "=r" (nAuxControl));
+    nAuxControl |= 1 << 11;
+    asm volatile ("mcr p15, 0, %0, c1, c0,  1" : : "r" (nAuxControl));   // SMP bit must be set according to ARM TRM    
+}
+
 int main(void) __attribute__((naked)); // w/o this doesn't work when booted directly (no u-boot)
 int main(void)
 {
     gpio = (unsigned int*)0x20200000;
-    unsigned int nAuxControl;
-    asm volatile ("mrc p15, 0, %0, c1, c0,  1" : "=r" (nAuxControl));
-    nAuxControl |= ARM_AUX_CONTROL_SMP;
-    asm volatile ("mcr p15, 0, %0, c1, c0,  1" : : "r" (nAuxControl));   // SMP bit must be set according to ARM TRM
-    
-    unsigned int nControl;
-    asm volatile ("mrc p15, 0, %0, c1, c0,  0" : "=r" (nControl));
-    nControl |= ARM_CONTROL_BRANCH_PREDICTION | ARM_CONTROL_L1_INSTRUCTION_CACHE;
-    asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");
-    
-    volatile unsigned int ra = gpio[4];
+    enableBranchPrediction();
+    enableL1Cache();
+
+    unsigned int ra = gpio[4];
     ra &= ~(7 << 21);
     ra |= 1 << 21;
     gpio[4] = ra;
