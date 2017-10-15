@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
 ./build.sh
-load2rpi.sh led.img
+mkdir -p ~/log
+load2rpi.sh led.img > ~/log/last-load.log
 
