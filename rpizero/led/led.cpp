@@ -6,12 +6,12 @@ void delay(int i)
 
 void shortDelay()
 {
-    delay(30000000);
+    delay(20000000);
 }
 
 void longDelay()
 {
-    delay(90000000);
+    delay(60000000);
 }
 
 volatile unsigned int* gpio;
