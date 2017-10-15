@@ -20,6 +20,9 @@ inline void GPIO::init(int addr)
 
 inline GPIO::Mode GPIO::getMode(int i)
 {
+    int wIndex = i / 10;
+    int bIndex = (i % 10) * 3;
+    return (Mode)((gpio_[wIndex] & ~(7 << bIndex)) >> bIndex);
 }
 
 inline GPIO::Mode GPIO::setMode(int i, Mode m)
