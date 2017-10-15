@@ -6,12 +6,12 @@ void delay(int i)
 
 void shortDelay()
 {
-    delay(10000000);
+    delay(30000000);
 }
 
 void longDelay()
 {
-    delay(30000000);
+    delay(90000000);
 }
 
 volatile unsigned int* gpio;
@@ -43,10 +43,13 @@ void sos()
     dot(); dot(); dot();
 }
 
-#define ARM_AUX_CONTROL_SMP	(1 << 6)
-
-#define ARM_CONTROL_BRANCH_PREDICTION	   (1 << 11)
-#define ARM_CONTROL_L1_INSTRUCTION_CACHE   (1 << 12)
+void enableBranchPrediction()
+{
+    unsigned int nAuxControl;
+    asm volatile ("mrc p15, 0, %0, c1, c0,  1" : "=r" (nAuxControl));
+    nAuxControl |= 1 << 11;
+    asm volatile ("mcr p15, 0, %0, c1, c0,  1" : : "r" (nAuxControl));   // SMP bit must be set according to ARM TRM    
+}
 
 void enableL1Cache()
 {
@@ -54,14 +57,6 @@ void enableL1Cache()
     asm volatile ("mrc p15, 0, %0, c1, c0,  0" : "=r" (nControl));
     nControl |= (1 << 11) | (1 << 12);
     asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
-}
-
-void enableBranchPrediction()
-{
-    unsigned int nAuxControl;
-    asm volatile ("mrc p15, 0, %0, c1, c0,  1" : "=r" (nAuxControl));
-    nAuxControl |= 1 << 11;
-    asm volatile ("mcr p15, 0, %0, c1, c0,  1" : : "r" (nAuxControl));   // SMP bit must be set according to ARM TRM    
 }
 
 int main(void) __attribute__((naked)); // w/o this doesn't work when booted directly (no u-boot)
