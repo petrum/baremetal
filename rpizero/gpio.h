@@ -3,7 +3,7 @@
 
 struct GPIO
 {
-    enum Mode {In, Out, ALT0, ALT1, ALT2, ALT3, ALT4, ALT5};
+    enum Mode {In, Out, Alt5, Alt4, Alt0, Alt1, Alt2, Alt3};
     static void init(int addr);
     static Mode getMode(int i);
     static Mode setMode(int i, Mode m);
