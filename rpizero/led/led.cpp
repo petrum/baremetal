@@ -80,7 +80,7 @@ int main(void)
     //In == 0, Out == 1, ALT0-ALT5 from 2 to 7 (total of 8, of three available bits)
     gpio[4] = (gpio[4] & ~(7 << 21)) | 1 << 21;
     //FSEL35 (GPFSEL3[15-17]) = 0 (GPIO In - [Low]): 
-    while (1)
+    while (true)
     {
         sos();
         longDelay();
