@@ -6,12 +6,12 @@ void delay(int i)
 
 void shortDelay()
 {
-    delay(20000000);
+    delay(10000000);
 }
 
 void longDelay()
 {
-    delay(60000000);
+    delay(30000000);
 }
 
 volatile unsigned int* gpio;
@@ -64,11 +64,10 @@ void enableL1Cache()
 int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
 int main(void)
 {
-    gpio = (unsigned int*)0x20200000;
-    
     enableBranchPrediction();
     enableL1Cache();
 
+    gpio = (unsigned int*)0x20200000;
     unsigned int ra = gpio[4];
     ra &= ~(7 << 21);
     ra |= 1 << 21;
