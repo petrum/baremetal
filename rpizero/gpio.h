@@ -4,7 +4,7 @@
 struct GPIO
 {
     enum Mode {In, Out, ALT0, ALT1, ALT2, ALT3, ALT4, ALT5};
-    static void init(int address);
+    static void init(int addr);
     static Mode getMode(int i);
     static Mode setMode(int i, Mode m);
     static void on(int i);
@@ -13,9 +13,9 @@ private:
     static volatile unsigned int* gpio_;
 };
 
-inline void GPIO::init(int a)
+inline void GPIO::init(int addr)
 {
-    gpio_ = (unsigned int*)a;
+    gpio_ = (unsigned int*)addr;
 }
 
 inline GPIO::Mode GPIO::getMode(int i)

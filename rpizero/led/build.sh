@@ -7,4 +7,3 @@ arm-none-eabi-g++ -O3 -nostartfiles -std=c++11 --entry=0x8000 led.cpp -o led.elf
 arm-none-eabi-nm led.elf
 arm-none-eabi-objcopy led.elf -O binary led.img
 size led.elf | tee led.size
-
