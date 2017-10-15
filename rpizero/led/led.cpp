@@ -55,7 +55,7 @@ void enableL1Cache()
 {
     unsigned int nControl;
     asm volatile ("mrc p15, 0, %0, c1, c0,  0" : "=r" (nControl));
-    nControl |= (1 << 11) | (1 << 12);
+    nControl |= 1 << 12;
     asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
 }
 
@@ -63,6 +63,7 @@ int main(void) __attribute__((naked)); // w/o this doesn't work when booted dire
 int main(void)
 {
     gpio = (unsigned int*)0x20200000;
+    
     enableBranchPrediction();
     enableL1Cache();
 
