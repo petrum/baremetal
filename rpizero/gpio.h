@@ -24,17 +24,18 @@ inline GPIO::Mode GPIO::getMode(int i)
 
 inline GPIO::Mode GPIO::setMode(int i, Mode m)
 {
-    //https://raspberrypi.stackexchange.com/questions/39252/on-board-led-connection-to-gpio
-    //"the power LED (red) is connected to GPIO 35 (not present on the Pi Zero)"
-    //"the activity LED (green) is connected to GPIO 47"
+    // i == 0 - 53
+    // https://raspberrypi.stackexchange.com/questions/39252/on-board-led-connection-to-gpio
+    // "the power LED (red) is connected to GPIO 35 (not present on the Pi Zero)"
+    // "the activity LED (green) is connected to GPIO 47"
     
-    //http://www.susa.net/wordpress/2012/07/raspberry-pi-gpfsel-gpio-and-pads-status-viewer/
-    //FSEL47 (GPFSEL4[21-23]) = 0 (GPIO In - [Low])
-    //In == 0, Out == 1, ALT0-ALT5 from 2 to 7 (total of 8, of three available bits)
+    // http://www.susa.net/wordpress/2012/07/raspberry-pi-gpfsel-gpio-and-pads-status-viewer/
+    // FSEL47 (GPFSEL4[21-23]) = 0 (GPIO In - [Low])
+    // In == 0, Out == 1, ALT0-ALT5 from 2 to 7 (total of 8, of three available bits)
     int wIndex = i / 10;
     int bIndex = (i % 10) * 3;
     gpio_[wIndex] = (gpio_[wIndex] & ~(7 << bIndex)) | 1 << bIndex;
-    //FSEL35 (GPFSEL3[15-17]) = 0 (GPIO In - [Low]): 
+    // FSEL35 (GPFSEL3[15-17]) = 0 (GPIO In - [Low]): 
 }
 
 void GPIO::on(int i)
