@@ -70,11 +70,16 @@ int main(void)
     enableL1Cache();
 
     gpio = (unsigned int*)0x20200000;
-    unsigned int ra = gpio[4];
-    ra &= ~(7 << 21);
-    ra |= 1 << 21;
-    gpio[4] = ra;
 
+    //https://raspberrypi.stackexchange.com/questions/39252/on-board-led-connection-to-gpio
+    //the power LED (red) is connected to GPIO 35 (not present on the Pi Zero)
+    //the activity LED (green) is connected to GPIO 47
+    
+    //http://www.susa.net/wordpress/2012/07/raspberry-pi-gpfsel-gpio-and-pads-status-viewer/
+    //FSEL47 (GPFSEL4[21-23]) = 0 (GPIO In - [Low])
+    //In == 0, Out == 1, ALT0-ALT5 from 2 to 7 (total of 8, of three available bits)
+    gpio[4] = (gpio[4] & ~(7 << 21)) | 1 << 21;
+    //FSEL35 (GPFSEL3[15-17]) = 0 (GPIO In - [Low]): 
     while (1)
     {
         sos();
