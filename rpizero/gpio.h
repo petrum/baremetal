@@ -25,8 +25,8 @@ inline GPIO::Mode GPIO::getMode(int i)
 inline GPIO::Mode GPIO::setMode(int i, Mode m)
 {
     //https://raspberrypi.stackexchange.com/questions/39252/on-board-led-connection-to-gpio
-    //the power LED (red) is connected to GPIO 35 (not present on the Pi Zero)
-    //the activity LED (green) is connected to GPIO 47
+    //"the power LED (red) is connected to GPIO 35 (not present on the Pi Zero)"
+    //"the activity LED (green) is connected to GPIO 47"
     
     //http://www.susa.net/wordpress/2012/07/raspberry-pi-gpfsel-gpio-and-pads-status-viewer/
     //FSEL47 (GPFSEL4[21-23]) = 0 (GPIO In - [Low])
