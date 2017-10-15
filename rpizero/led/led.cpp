@@ -43,6 +43,7 @@ void sos()
     dot(); dot(); dot();
 }
 
+//https://www.raspberrypi.org/forums/viewtopic.php?f=72&t=98904#p689471
 void enableBranchPrediction()
 {
     unsigned int nAuxControl;
