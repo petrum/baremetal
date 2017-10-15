@@ -60,6 +60,7 @@ void enableL1Cache()
     asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
 }
 
+//https://www.evilsocket.net/2015/05/02/using-inline-assembly-and-naked-functions-to-fool-disassemblers/
 int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
 int main(void)
 {
