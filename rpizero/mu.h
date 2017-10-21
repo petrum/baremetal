@@ -52,7 +52,7 @@ inline void MU::send(unsigned int c)
         if (mu_[AUX_MU_LSR_REG] & 0x20) // Line status
             break;
     }
-    dot();
+    whink(c);
     mu_[AUX_MU_IO_REG] = c;
 }
 
@@ -63,7 +63,7 @@ inline unsigned int MU::recv()
         if (mu_[AUX_MU_LSR_REG] & 0x01) // Line status
             break;
     }
-    line();
+    //line();
     return mu_[AUX_MU_IO_REG] & 0xFF;
 }
 

@@ -42,7 +42,7 @@ int main(void)
     GPIO::init(0x20200000);
     MU::init(0x20215000);
    
-    hexstring(0x12345678);
+    //hexstring(0x12345678);
     
     while (true)
     {
