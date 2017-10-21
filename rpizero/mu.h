@@ -1,6 +1,8 @@
 #ifndef __MU_H__
 #define __MU_H__
 
+#include "gpio.h"
+
 struct MU
 {
     static void init(int addr);
@@ -26,7 +28,7 @@ private:
 inline void MU::init(int addr)
 {
     mu_ = (unsigned int*)addr;
-    mu_[AUX_ENABLES] = 1; // Auxiliary enables
+    mu_[AUX_ENABLES] = 1; // Auxiliary enables (1 == MU, 2 == SPI1, 4 == SPI2)
     mu_[AUX_MU_IER_REG] = 0; // Interrupt enable
     mu_[AUX_MU_CNTL_REG] = 0; // Extra control
     mu_[AUX_MU_LCR_REG] = 3; // Line control
@@ -50,6 +52,7 @@ inline void MU::send(unsigned int c)
         if (mu_[AUX_MU_LSR_REG] & 0x20) // Line status
             break;
     }
+    dot();
     mu_[AUX_MU_IO_REG] = c;
 }
 
@@ -60,6 +63,7 @@ inline unsigned int MU::recv()
         if (mu_[AUX_MU_LSR_REG] & 0x01) // Line status
             break;
     }
+    line();
     return mu_[AUX_MU_IO_REG] & 0xFF;
 }
 

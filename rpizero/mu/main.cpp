@@ -40,29 +40,9 @@ int main(void)
     //enableL1Cache();
 
     GPIO::init(0x20200000);
-
-    for (int i = 0; i < sizeof(unsigned int); ++i)
-    {
-        GPIO::on(47);
-        shortDelay();
-        GPIO::off(47);
-        shortDelay();
-    }
-    
     MU::init(0x20215000);
-    longDelay();
-    
-    GPIO::on(47);
-    shortDelay();
-    GPIO::off(47);
-    shortDelay();
    
     hexstring(0x12345678);
-    
-    GPIO::on(47);
-    shortDelay();
-    GPIO::off(47);
-    shortDelay();
     
     while (true)
     {

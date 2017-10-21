@@ -1,22 +1,6 @@
 #include "../gpio.h"
 #include "../misc.h"
 
-void dot()
-{
-    GPIO::on(47);
-    shortDelay();
-    GPIO::off(47);
-    shortDelay(); 
-}
-
-void line()
-{
-    GPIO::on(47);
-    longDelay();
-    GPIO::off(47);
-    shortDelay(); 
-}
-
 void sos()
 {
     dot();

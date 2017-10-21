@@ -77,4 +77,21 @@ inline void GPIO::setPUD(int i, PUD pud)
     gpio_[PUDCLK / 4] = 0;
 }
 
+inline void dot()
+{
+    GPIO::on(47);
+    shortDelay();
+    GPIO::off(47);
+    shortDelay(); 
+}
+
+inline void line()
+{
+    GPIO::on(47);
+    longDelay();
+    GPIO::off(47);
+    shortDelay(); 
+}
+
+
 #endif
