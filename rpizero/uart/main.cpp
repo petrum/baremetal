@@ -1,5 +1,6 @@
 #include "../gpio.h"
 #include "../misc.h"
+#include "../uart.h"
 
 #define GPPUD       0x94
 #define GPPUDCLK0   0x98
@@ -14,7 +15,7 @@
 #define AUX_MU_CNTL_REG 0x15060
 #define AUX_MU_BAUD_REG 0x15068
 
-static inline void delay(int32_t count)
+static inline void delay(int count)
 {
   asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
                : : [count]"r"(count) : "cc");
