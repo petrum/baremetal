@@ -31,19 +31,21 @@ inline void MU::init(int addr)
 {
     mu_ = (unsigned int*)addr;
     
-    GPIO::setMode(14, GPIO::Alt5);
-    GPIO::setMode(15, GPIO::Alt5);
-    GPIO::setPUD(14, GPIO::PullOff);
-    GPIO::setPUD(15, GPIO::PullOff);
-
     mu_[AUX_ENABLES] = 1; // Auxiliary enables (1 == MU, 2 == SPI1, 4 == SPI2)
     mu_[AUX_MU_IER_REG] = 0; // Interrupt enable
+    //mu_[AUX_MU_IIR_REG] = 0x0; // Interrupt identify
+
     mu_[AUX_MU_CNTL_REG] = 0; // Extra control
     mu_[AUX_MU_LCR_REG] = 3; // Line control
     mu_[AUX_MU_MCR_REG] = 0; // Modem control
     mu_[AUX_MU_IER_REG] = 0; // Interrupt enable    
     mu_[AUX_MU_IIR_REG] = 0xC6; // Interrupt identify
     mu_[AUX_MU_BAUD_REG] = 270; // Baudrate    
+
+    GPIO::setMode(14, GPIO::Alt5);
+    GPIO::setMode(15, GPIO::Alt5);
+    GPIO::setPUD(14, GPIO::PullOff);
+    GPIO::setPUD(15, GPIO::PullOff);
 
     mu_[AUX_MU_CNTL_REG] = 3; // Extra control
 }
@@ -106,9 +108,9 @@ inline void hexstring(unsigned int d)
 
 inline void MU::write(const char* buffer)
 {
-    for (int i = 0; buffer[i] != 0; ++i)
+    for (; *buffer != 0; ++buffer)
     {
-        putc(buffer[i]);
+        putc(*buffer);
     }
 }
 
