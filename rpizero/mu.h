@@ -6,9 +6,12 @@
 struct MU
 {
     static void init(int addr);
+public:
     static char getc();
     static void putc(char c);
+public:
     static void write(const char* buffer);
+    static void hexstring(unsigned int d);
 private:
     static void send(char);
     static volatile unsigned int* mu_;
@@ -52,6 +55,7 @@ inline void MU::init(int addr)
 
 inline void MU::putc(char c)
 {
+    GPIO::on(47);
     if (c == '\n' || c == '\r')
     {
         send('\n');
@@ -61,6 +65,7 @@ inline void MU::putc(char c)
     {
         send(c);
     }
+    GPIO::off(47);
 }
 
 inline void MU::send(char c)
@@ -83,9 +88,10 @@ inline char MU::getc()
     return mu_[AUX_MU_IO_REG] & 0xFF;
 }
 
-inline void hexstrings(unsigned int d)
+inline void MU::hexstring(unsigned int d)
 {
-    MU::write("0x");
+    MU::send('0');
+    MU::send('x');
     int rb = 32;
     while (true)
     {
@@ -95,15 +101,10 @@ inline void hexstrings(unsigned int d)
             rc += ('A' - 10);
         else
             rc += '0';
-        MU::putc(rc);
+        MU::send(rc);
         if (rb == 0)
             break;
     }
-}
-
-inline void hexstring(unsigned int d)
-{
-    hexstrings(d);
 }
 
 inline void MU::write(const char* buffer)
@@ -113,6 +114,5 @@ inline void MU::write(const char* buffer)
         putc(*buffer);
     }
 }
-
 
 #endif

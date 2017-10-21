@@ -21,7 +21,7 @@ int main()
     MU::init(0x20215000);
    
     MU::write("Hello world!\n");
-    hexstring(32);
+    MU::hexstring(32);
     
     while (true)
     {
