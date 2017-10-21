@@ -109,7 +109,9 @@ inline void hexstring(unsigned int d)
 inline void MU::write(const char* buffer)
 {
     for (int i = 0; buffer[i] != 0; ++i)
+    {
         putc(buffer[i]);
+    }
 }
 
 
