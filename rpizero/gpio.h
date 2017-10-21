@@ -1,6 +1,8 @@
 #ifndef __GPIO_H__
 #define __GPIO_H__
 
+#include "misc.h"
+
 struct GPIO
 {
     enum Mode {In, Out, Alt5, Alt4, Alt0, Alt1, Alt2, Alt3};
@@ -11,7 +13,6 @@ struct GPIO
     static void setPUD(int i, PUD ud);
     static void on(int i);
     static void off(int i);
-    static void delay(int count);
 private:
     static volatile unsigned int* gpio_;
 };
@@ -75,12 +76,5 @@ inline void GPIO::setPUD(int i, PUD pud)
     // Write 0 to GPPUDCLK0 to make it take effect.
     gpio_[PUDCLK / 4] = 0;
 }
-
-inline void GPIO::delay(int count)
-{
-    asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
-                 : : [count]"r"(count) : "cc");
-}
-
 
 #endif

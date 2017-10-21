@@ -36,10 +36,19 @@ volatile unsigned int* GPIO::gpio_;
 int main(void) __attribute__((naked)); 
 int main(void)
 {
-    enableBranchPrediction();
-    enableL1Cache();
+    //enableBranchPrediction();
+    //enableL1Cache();
 
     GPIO::init(0x20200000);
+
+    for (int i = 0; i < sizeof(unsigned int); ++i)
+    {
+        GPIO::on(47);
+        shortDelay();
+        GPIO::off(47);
+        shortDelay();
+    }
+    
     MU::init(0x20215000);
     
     hexstring(0x12345678);

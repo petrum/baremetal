@@ -1,23 +1,6 @@
 #include "../gpio.h"
 #include "../misc.h"
 
-void delay(int i)
-{
-    for(volatile int tim = 0; tim < i; tim++)
-        ;   
-}
-
-void shortDelay()
-{
-    delay(10000000);
-}
-
-void longDelay()
-{
-    for (int i = 0; i != 3; ++i)
-        shortDelay();
-}
-
 void dot()
 {
     GPIO::on(47);

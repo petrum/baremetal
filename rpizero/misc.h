@@ -1,3 +1,6 @@
+#ifndef __MISC_H__
+#define __MISC_H__
+
 //https://www.raspberrypi.org/forums/viewtopic.php?f=72&t=98904#p689471
 inline void enableBranchPrediction()
 {
@@ -14,3 +17,32 @@ inline void enableL1Cache()
     nControl |= 1 << 12;
     asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
 }
+
+inline void delay(int i)
+{
+    for(volatile int tim = 0; tim < i; tim++)
+        ;   
+    /*
+    for (int i = 0; i < count; ++i)
+    {
+        asm volatile ("");
+    }
+    */
+    /*
+    asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+                 : : [count]"r"(count) : "cc");
+    */
+}
+
+inline void shortDelay()
+{
+    delay(10000000);
+}
+
+inline void longDelay()
+{
+    for (int i = 0; i != 3; ++i)
+        shortDelay();
+}
+
+#endif
