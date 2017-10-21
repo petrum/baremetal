@@ -14,18 +14,18 @@ private:
     static volatile unsigned int* mu_;
 };
 
-#define AUX_ENABLES     (0x04 / 4)
-#define AUX_MU_IO_REG   (0x40 / 4)
-#define AUX_MU_IER_REG  (0x44 / 4)
-#define AUX_MU_IIR_REG  (0x48 / 4)
-#define AUX_MU_LCR_REG  (0x4C / 4)
-#define AUX_MU_MCR_REG  (0x50 / 4)
-#define AUX_MU_LSR_REG  (0x54 / 4)
-#define AUX_MU_MSR_REG  (0x58 / 4)
-#define AUX_MU_SCRATCH  (0x5C / 4)
-#define AUX_MU_CNTL_REG (0x60 / 4)
-#define AUX_MU_STAT_REG (0x64 / 4)
-#define AUX_MU_BAUD_REG (0x68 / 4)
+const int AUX_ENABLES     = 0x04 / 4;
+const int AUX_MU_IO_REG   = 0x40 / 4;
+const int AUX_MU_IER_REG  = 0x44 / 4;
+const int AUX_MU_IIR_REG  = 0x48 / 4;
+const int AUX_MU_LCR_REG  = 0x4C / 4;
+const int AUX_MU_MCR_REG  = 0x50 / 4;
+const int AUX_MU_LSR_REG  = 0x54 / 4;
+const int AUX_MU_MSR_REG  = 0x58 / 4;
+const int AUX_MU_SCRATCH  = 0x5C / 4;
+const int AUX_MU_CNTL_REG = 0x60 / 4;
+const int AUX_MU_STAT_REG = 0x64 / 4;
+const int AUX_MU_BAUD_REG = 0x68 / 4;
 
 inline void MU::init(int addr)
 {
