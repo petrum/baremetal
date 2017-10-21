@@ -50,8 +50,20 @@ int main(void)
     }
     
     MU::init(0x20215000);
+    longDelay();
     
+    GPIO::on(47);
+    shortDelay();
+    GPIO::off(47);
+    shortDelay();
+   
     hexstring(0x12345678);
+    
+    GPIO::on(47);
+    shortDelay();
+    GPIO::off(47);
+    shortDelay();
+    
     while (true)
     {
         MU::send(MU::recv());
