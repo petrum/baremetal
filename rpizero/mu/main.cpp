@@ -36,8 +36,8 @@ volatile unsigned int* GPIO::gpio_;
 int main(void) __attribute__((naked)); 
 int main(void)
 {
-    //enableBranchPrediction();
-    //enableL1Cache();
+    enableBranchPrediction();
+    enableL1Cache();
 
     GPIO::init(0x20200000);
     MU::init(0x20215000);
