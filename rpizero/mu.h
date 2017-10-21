@@ -8,6 +8,7 @@ struct MU
     static void init(int addr);
     static unsigned int recv();
     static void send(unsigned int);
+    static void write(const char* buffer);
 private:
     static volatile unsigned int* mu_;
 };
@@ -67,5 +68,38 @@ inline unsigned int MU::recv()
     //line();
     return mu_[AUX_MU_IO_REG] & 0xFF;
 }
+
+inline void hexstrings(unsigned int d)
+{
+    MU::write("0x");
+    unsigned int rb = 32;
+    while (true)
+    {
+        rb -= 4;
+        unsigned int rc = (d >> rb) & 0xF;
+        if (rc > 9)
+            rc += 0x37;
+        else
+            rc += 0x30;
+        MU::send(rc);
+        if (rb == 0)
+            break;
+    }
+    MU::send(0x20);
+}
+
+inline void hexstring(unsigned int d)
+{
+    hexstrings(d);
+    MU::send(0x0D);
+    MU::send(0x0A);
+}
+
+inline void MU::write(const char* buffer)
+{
+    for (int i = 0; buffer[i] != 0; ++i)
+        send(buffer[i]);
+}
+
 
 #endif
