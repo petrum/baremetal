@@ -2,6 +2,5 @@
 set -e
 ./build.sh
 mkdir -p ~/log
-load2rpi.sh mu.img connect > ~/log/last-load-mu.log
-
+load2rpi.sh mu.img connect
 
