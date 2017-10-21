@@ -6,10 +6,11 @@
 struct MU
 {
     static void init(int addr);
-    static unsigned int recv();
-    static void send(unsigned int);
+    static char getc();
+    static void putc(char c);
     static void write(const char* buffer);
 private:
+    static void send(char);
     static volatile unsigned int* mu_;
 };
 
@@ -46,59 +47,69 @@ inline void MU::init(int addr)
     mu_[AUX_MU_CNTL_REG] = 3; // Extra control
 }
 
-inline void MU::send(unsigned int c)
+inline void MU::putc(char c)
+{
+    if (c == '\n' || c == '\r')
+    {
+        send('\n');
+        send('\r');
+    }
+    else
+    {
+        send(c);
+    }
+}
+
+inline void MU::send(char c)
 {
     while (true)
     {
         if (mu_[AUX_MU_LSR_REG] & 0x20) // Line status
             break;
     }
-    //whink(c);
-    //dot();
     mu_[AUX_MU_IO_REG] = c;
 }
 
-inline unsigned int MU::recv()
+inline char MU::getc()
 {
     while (true)
     {
         if (mu_[AUX_MU_LSR_REG] & 0x01) // Line status
             break;
     }
-    //line();
     return mu_[AUX_MU_IO_REG] & 0xFF;
 }
 
 inline void hexstrings(unsigned int d)
 {
     MU::write("0x");
-    unsigned int rb = 32;
+    int rb = 32;
     while (true)
     {
         rb -= 4;
-        unsigned int rc = (d >> rb) & 0xF;
+        char rc = (d >> rb) & 0xF;
         if (rc > 9)
             rc += 0x37;
         else
             rc += 0x30;
-        MU::send(rc);
+        MU::putc(rc);
         if (rb == 0)
             break;
     }
-    MU::send(0x20);
+    MU::putc(0x20);
 }
 
 inline void hexstring(unsigned int d)
 {
     hexstrings(d);
-    MU::send(0x0D);
-    MU::send(0x0A);
+    MU::putc(0x0D);
+    MU::putc(0x0A);
 }
 
 inline void MU::write(const char* buffer)
 {
     for (int i = 0; buffer[i] != 0; ++i)
-        send(buffer[i]);
+        putc(buffer[i]);
 }
 
 

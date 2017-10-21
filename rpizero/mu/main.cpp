@@ -20,12 +20,12 @@ int main()
     GPIO::init(0x20200000);
     MU::init(0x20215000);
    
-    MU::write("Hello world!\n\r");
+    MU::write("Hello world!\n");
     hexstring(32);
     
     while (true)
     {
-        MU::send(MU::recv());
+        MU::putc(MU::getc());
     }
     return 0;
 }
