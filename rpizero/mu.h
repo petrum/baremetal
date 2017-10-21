@@ -90,9 +90,9 @@ inline void hexstrings(unsigned int d)
         rb -= 4;
         char rc = (d >> rb) & 0xF;
         if (rc > 9)
-            rc += 0x37;
+            rc += ('A' - 10);
         else
-            rc += 0x30;
+            rc += '0';
         MU::putc(rc);
         if (rb == 0)
             break;
