@@ -32,7 +32,7 @@ inline void MU::init(int addr)
     mu_[AUX_MU_LCR_REG] = 3; // Line control
     mu_[AUX_MU_MCR_REG] = 0; // Modem control
     mu_[AUX_MU_IER_REG] = 0; // Interrupt enable    
-    mu_[AUX_MU_IIR_REG] = 0xC6; // Interrup identify
+    mu_[AUX_MU_IIR_REG] = 0xC6; // Interrupt identify
     mu_[AUX_MU_BAUD_REG] = 270; // Baudrate    
 
     GPIO::setMode(14, GPIO::Alt5);
