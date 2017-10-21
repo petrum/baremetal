@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-rm -rf *.elf *.img
+./clean.sh
 # removing -nostartfiles ==> linking fails b/c it needs _exit: "undefined reference to `_exit'"
 arm-none-eabi-g++ -O3 -nostartfiles -std=c++11 --entry=0x8000 main.cpp -o led.elf
 arm-none-eabi-nm led.elf

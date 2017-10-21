@@ -1,11 +1,10 @@
 #!/bin/bash
+
 set -e
 ./clean.sh
 
-arm-none-eabi-gcc -Wall -Wextra -O2 -nostdlib -nostartfiles -ffreestanding  -c pmain.c
-arm-none-eabi-as -c start.asm -o start.o
-
-# the order of *.o is important
-arm-none-eabi-ld -T boot.ld -o uart-hello.elf start.o pmain.o
-arm-none-eabi-objcopy uart-hello.elf -O binary uart-hello.bin
+arm-none-eabi-g++ -O3 -nostartfiles -std=c++11 --entry=0x8000 main.cpp -o uart.elf
+arm-none-eabi-nm uart.elf
+arm-none-eabi-objcopy uart.elf -O binary uart.img
+size uart.elf | tee uart.size
 
