@@ -1,0 +1,24 @@
+==== How to test ====
+- copy the mu.img on the SD card
+- edit config.txt
+- start the screen command:
+
+$> screen /dev/ttyUSB0 115200
+Hello world!
+0x00000020
+
+
+- detach: "Ctrl-a + d"
+- exit: "Ctrl-a \"
+- reattach: 
+  $> screen -r
+- list sessions:
+
+$ screen -ls
+There is a screen on:
+        25789.pts-1.nuc (10/21/17 13:50:47)     (Detached)
+1 Socket in /var/run/screen/S-petrum.
+
+- reattach to specific session: 
+  $> screen -r 25789.pts-1.nuc
+
