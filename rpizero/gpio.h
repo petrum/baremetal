@@ -27,6 +27,7 @@ inline GPIO::Mode GPIO::getMode(int i)
 
 inline GPIO::Mode GPIO::setMode(int i, Mode m)
 {
+    GPIO::Mode old = GPIO::getMode(i);
     // i == 0 - 53
     // https://raspberrypi.stackexchange.com/questions/39252/on-board-led-connection-to-gpio
     // "the power LED (red) is connected to GPIO 35 (not present on the Pi Zero)"
@@ -39,6 +40,7 @@ inline GPIO::Mode GPIO::setMode(int i, Mode m)
     int bIndex = (i % 10) * 3;
     gpio_[wIndex] = (gpio_[wIndex] & ~(7 << bIndex)) | m << bIndex;
     // FSEL35 (GPFSEL3[15-17]) = 0 (GPIO In - [Low]): 
+    return old;
 }
 
 void GPIO::on(int i)
