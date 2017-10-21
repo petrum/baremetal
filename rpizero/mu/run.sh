@@ -2,5 +2,6 @@
 set -e
 ./build.sh
 mkdir -p ~/log
-load2rpi.sh led.img > ~/log/last-load-led.log
+load2rpi.sh mu.img > ~/log/last-load-mu.log
+
 
