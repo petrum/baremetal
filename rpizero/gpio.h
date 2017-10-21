@@ -66,14 +66,15 @@ inline void GPIO::off(int i)
 inline void GPIO::setPUD(int i, PUD pud)
 {
     // Disable pull up/down for all GPIO pins & delay for 150 cycles.
-    gpio_[0x94] = pud;
+    gpio_[0x94 / 4] = pud;
     delay(150);
     // Disable pull up/down for pin 14,15 & delay for 150 cycles.
     int PUDCLK = i < 32 ? 0x98 : 0x9C;
-    gpio_[PUDCLK] = 1 << i;
+    gpio_[PUDCLK / 4] = 1 << i;
+    //gpio_[PUDCLK / 4] = i;
     delay(150);
     // Write 0 to GPPUDCLK0 to make it take effect.
-    gpio_[PUDCLK] = 0;
+    gpio_[PUDCLK / 4] = 0;
 }
 
 inline void GPIO::delay(int count)

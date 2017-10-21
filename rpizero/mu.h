@@ -10,44 +10,57 @@ private:
     static volatile unsigned int* mu_;
 };
 
+#define AUX_ENABLES     (0x04 / 4)
+#define AUX_MU_IO_REG   (0x40 / 4)
+#define AUX_MU_IER_REG  (0x44 / 4)
+#define AUX_MU_IIR_REG  (0x48 / 4)
+#define AUX_MU_LCR_REG  (0x4C / 4)
+#define AUX_MU_MCR_REG  (0x50 / 4)
+#define AUX_MU_LSR_REG  (0x54 / 4)
+#define AUX_MU_MSR_REG  (0x58 / 4)
+#define AUX_MU_SCRATCH  (0x5C / 4)
+#define AUX_MU_CNTL_REG (0x60 / 4)
+#define AUX_MU_STAT_REG (0x64 / 4)
+#define AUX_MU_BAUD_REG (0x68 / 4)
+
 inline void MU::init(int addr)
 {
     mu_ = (unsigned int*)addr;
-    mu_[0x04] = 1; // Auxiliary enables
-    mu_[0x44] = 0; // Interrup enable
-    mu_[0x60] = 0; // Extra control
-    mu_[0x4C] = 3; // Line control
-    mu_[0x50] = 0; // Modem control
-    mu_[0x44] = 0; // Interrup enable    
-    mu_[0x48] = 0xC6; // Interrup identify
-    mu_[0x68] = 270; // Baudrate    
+    mu_[AUX_ENABLES] = 1; // Auxiliary enables
+    mu_[AUX_MU_IER_REG] = 0; // Interrupt enable
+    mu_[AUX_MU_CNTL_REG] = 0; // Extra control
+    mu_[AUX_MU_LCR_REG] = 3; // Line control
+    mu_[AUX_MU_MCR_REG] = 0; // Modem control
+    mu_[AUX_MU_IER_REG] = 0; // Interrupt enable    
+    mu_[AUX_MU_IIR_REG] = 0xC6; // Interrup identify
+    mu_[AUX_MU_BAUD_REG] = 270; // Baudrate    
 
     GPIO::setMode(14, GPIO::Alt5);
     GPIO::setMode(15, GPIO::Alt5);
     GPIO::setPUD(14, GPIO::PullOff);
     GPIO::setPUD(15, GPIO::PullOff);
 
-    mu_[0x60] = 3;
+    mu_[AUX_MU_CNTL_REG] = 3; // Extra control
 }
 
 inline void MU::send(unsigned int c)
 {
     while (true)
     {
-        if (mu_[0x54] & 0x20) // Line status
+        if (mu_[AUX_MU_LSR_REG] & 0x20) // Line status
             break;
     }
-    mu_[0x40] = c;
+    mu_[AUX_MU_IO_REG] = c;
 }
 
 inline unsigned int MU::recv()
 {
     while (true)
     {
-        if (mu_[0x54] & 0x01) // Line status
+        if (mu_[AUX_MU_LSR_REG] & 0x01) // Line status
             break;
     }
-    return mu_[0x40] & 0xFF;
+    return mu_[AUX_MU_IO_REG] & 0xFF;
 }
 
 #endif
