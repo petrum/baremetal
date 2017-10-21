@@ -4,11 +4,14 @@
 struct GPIO
 {
     enum Mode {In, Out, Alt5, Alt4, Alt0, Alt1, Alt2, Alt3};
+    enum PUD {PullOff, PullDown, PullUp};
     static void init(int addr);
     static Mode getMode(int i);
     static Mode setMode(int i, Mode m);
+    static void setPUD(int i, PUD ud);
     static void on(int i);
     static void off(int i);
+    static void delay(int count);
 private:
     static volatile unsigned int* gpio_;
 };
@@ -43,7 +46,7 @@ inline GPIO::Mode GPIO::setMode(int i, Mode m)
     return old;
 }
 
-void GPIO::on(int i)
+inline void GPIO::on(int i)
 {
     // pag. 90 in the BCM2835 ARM Peripherals doc
     if (i < 32)
@@ -52,12 +55,32 @@ void GPIO::on(int i)
         gpio_[11] = 1 << (i - 32);
 }
 
-void GPIO::off(int i)
+inline void GPIO::off(int i)
 {
     if (i < 32)
         gpio_[7] = 1 << i;
     else
         gpio_[8] = 1 << (i - 32);
 }
+
+inline void GPIO::setPUD(int i, PUD pud)
+{
+    // Disable pull up/down for all GPIO pins & delay for 150 cycles.
+    gpio_[0x94] = pud;
+    delay(150);
+    // Disable pull up/down for pin 14,15 & delay for 150 cycles.
+    int PUDCLK = i < 32 ? 0x98 : 0x9C;
+    gpio_[PUDCLK] = 1 << i;
+    delay(150);
+    // Write 0 to GPPUDCLK0 to make it take effect.
+    gpio_[PUDCLK] = 0;
+}
+
+inline void GPIO::delay(int count)
+{
+    asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+                 : : [count]"r"(count) : "cc");
+}
+
 
 #endif
