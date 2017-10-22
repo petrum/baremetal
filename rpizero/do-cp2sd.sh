@@ -6,6 +6,8 @@ FILE=$2
 SD=/media/petrum/$ID
 echo "kernel=$FILE" > $SD/config.txt
 cat $SD/config.txt
+./build.sh
+
 cp $FILE $SD && ls -ltr $SD && umount $SD
 
 SEC=10

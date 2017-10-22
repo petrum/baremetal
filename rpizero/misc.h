@@ -18,16 +18,15 @@ inline void enableL1Cache()
     asm volatile ("mcr p15, 0, %0, c1, c0,  0" : : "r" (nControl) : "memory");    
 }
 
-inline void delay(int i)
+inline void delay(int count)
 {
-    for(volatile int tim = 0; tim < i; tim++)
-        ;   
-    /*
+    //for(volatile int tim = 0; tim < count; tim++);   
+    
     for (int i = 0; i < count; ++i)
     {
         asm volatile ("");
     }
-    */
+    
     /*
     asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
                  : : [count]"r"(count) : "cc");
