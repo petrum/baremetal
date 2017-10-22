@@ -1,22 +1,11 @@
 #include "../gpio.h"
 #include "../misc.h"
 
-void sos()
-{
-    dot();
-    dot();
-    dot();
-    line();
-    line();
-    line();
-    dot();
-    dot();
-    dot();
-}
+void sos();
 
 volatile unsigned int* GPIO::gpio_;
 //https://www.evilsocket.net/2015/05/02/using-inline-assembly-and-naked-functions-to-fool-disassemblers/
-int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
+//int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
 int main(void)
 {
     enableBranchPrediction();
@@ -31,4 +20,17 @@ int main(void)
         longDelay();
         longDelay();
     }
+}
+
+void sos()
+{
+    dot();
+    dot();
+    dot();
+    line();
+    line();
+    line();
+    dot();
+    dot();
+    dot();
 }
