@@ -7,7 +7,7 @@ inline void enableBranchPrediction()
     unsigned int nAuxControl;
     asm volatile ("mrc p15, 0, %0, c1, c0,  1" : "=r" (nAuxControl));
     nAuxControl |= 1 << 11;
-    asm volatile ("mcr p15, 0, %0, c1, c0,  1" : : "r" (nAuxControl));   // SMP bit must be set according to ARM TRM    
+    asm volatile ("mcr p15, 0, %0, c1, c0,  1" : : "r" (nAuxControl));
 }
 
 inline void enableL1Cache()

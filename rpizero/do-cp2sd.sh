@@ -12,7 +12,7 @@ cp $FILE $SD && ls -ltr $SD && umount $SD
 
 SEC=10
 echo "Rebooting in $SEC sec..."
-for i in $(seq $SEC); do
+for i in $(seq $SEC -1 1); do
     echo -n "$i "
     sleep 1
 done
