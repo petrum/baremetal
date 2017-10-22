@@ -4,7 +4,7 @@ ID=$1
 FILE=$2
 
 SD=/media/petrum/$ID
-echo "kernel=FILE" > $SD/config.txt
+echo "kernel=$FILE" > $SD/config.txt
 cat $SD/config.txt
 cp $FILE $SD && ls -ltr $SD && umount $SD
 
