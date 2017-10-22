@@ -20,8 +20,6 @@ inline void enableL1Cache()
 
 inline void delay(int count)
 {
-    //for(volatile int tim = 0; tim < count; tim++);   
-    
     for (int i = 0; i < count; ++i)
     {
         asm volatile ("");
@@ -30,6 +28,19 @@ inline void delay(int count)
     /*
     asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
                  : : [count]"r"(count) : "cc");
+This generates some strange __delay_XX variable (10 - 90).
+Example:
+
+000181b0 R __data_start
+00008098 t __delay_10
+000080a4 t __delay_12
+000080b0 t __delay_14
+000080bc t __delay_16
+000080c8 t __delay_18
+000080d4 t __delay_20
+//...
+0000806c t __delay_90
+000181b4 B __end__
     */
 }
 
