@@ -25,7 +25,9 @@ int main()
     
     while (true)
     {
-        MU::putc(MU::getc());
+        char ch = MU::getc();
+        MU::putc(ch);
+        dot();
     }
     return 0;
 }

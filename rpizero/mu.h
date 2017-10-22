@@ -55,17 +55,20 @@ inline void MU::init(int addr)
 
 inline void MU::putc(char c)
 {
-    GPIO::on(47);
+    
     if (c == '\n' || c == '\r')
     {
         send('\n');
         send('\r');
     }
+    else if (c == 0x7F)
+    {
+        send('\b');
+    }
     else
     {
         send(c);
     }
-    GPIO::off(47);
 }
 
 inline void MU::send(char c)
