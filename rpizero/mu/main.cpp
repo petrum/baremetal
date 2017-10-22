@@ -12,6 +12,7 @@ $> arm-none-eabi-nm mu.elf
 00008000 T main  <=== the first non-inline function defined in the main.cpp compilation unit!
 */
 
+//int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
 int main()
 {
     enableBranchPrediction();
