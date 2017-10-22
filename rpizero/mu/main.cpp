@@ -22,11 +22,13 @@ int main()
     MU::init(0x20215000);
    
     MU::write("Hello world!\n");
-    MU::hexstring(32);
+    MU::hexstring(42);
+    MU::putc('\n');
     
     for (;;)
     {
-        MU::putc(MU::getc());
+        volatile char c = MU::getc();
+        MU::putc(c);
     }
     return 0;
 }
