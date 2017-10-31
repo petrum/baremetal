@@ -2,6 +2,7 @@
 #include "../misc.h"
 
 void rgb();
+void init(int);
 
 volatile unsigned int* GPIO::gpio_;
 //https://www.evilsocket.net/2015/05/02/using-inline-assembly-and-naked-functions-to-fool-disassemblers/
@@ -12,10 +13,10 @@ int main(void)
     enableL1Cache();
 
     GPIO::init(0x20200000);
-    // the activity LED (green) is connected to GPIO 47
-    GPIO::setMode(17, GPIO::Out);
-    GPIO::setMode(21, GPIO::Out);
-    GPIO::setMode(22, GPIO::Out);
+
+    init(17);
+    init(21);
+    init(22);
     while (true)
     {
         rgb();
@@ -24,6 +25,25 @@ int main(void)
     }
 }
 
+void init(int i)
+{    
+    GPIO::setMode(i, GPIO::Out);
+    GPIO::setPUD(i, GPIO::PullDown);
+    GPIO::on(i);
+}
+
 void rgb()
 {
+    GPIO::off(17);
+    shortDelay();
+
+    GPIO::on(17);
+    GPIO::off(21);
+    shortDelay();
+
+    GPIO::on(21);
+    GPIO::off(22);
+    shortDelay();
+
+    GPIO::on(22);
 }
