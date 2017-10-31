@@ -1,0 +1,4 @@
+Check:
+- why we need the 'naked' declaration; what difference introduces? (check 'nm' etc)
+- why the code is much faster in the u-boot env?
+
