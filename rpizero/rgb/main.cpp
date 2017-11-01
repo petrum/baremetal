@@ -14,13 +14,13 @@ int main(void)
 
     GPIO::init(0x20200000);
 
-    init(17);
-    init(21);
+    //init(17);
+    //init(21);
     init(22);
   
     while (true)
     {
-        rgb();
+        //rgb();
         longDelay();
         longDelay();
     }
@@ -29,22 +29,22 @@ int main(void)
 void init(int i)
 {    
     GPIO::setMode(i, GPIO::Out);
-    GPIO::setPUD(i, GPIO::PullDown);
+    GPIO::setPUD(i, GPIO::PullUp);
     GPIO::off(i);
 }
 
 void rgb()
 {
-    GPIO::on(17);
-    shortDelay();
-
     GPIO::off(17);
-    GPIO::on(21);
     shortDelay();
 
+    GPIO::on(17);
     GPIO::off(21);
-    GPIO::on(22);
     shortDelay();
 
+    GPIO::on(21);
     GPIO::off(22);
+    shortDelay();
+
+    GPIO::on(22);
 }
