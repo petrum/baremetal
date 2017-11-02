@@ -29,7 +29,7 @@ int main(void)
 void init(int i)
 {    
     GPIO::setMode(i, GPIO::Out);
-    GPIO::setPUD(i, GPIO::PullDown);
+    GPIO::setPUD(i, GPIO::PullUp);
     GPIO::off(i);
 }
 
