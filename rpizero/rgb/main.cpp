@@ -8,6 +8,8 @@ volatile unsigned int* GPIO::gpio_;
 //https://www.evilsocket.net/2015/05/02/using-inline-assembly-and-naked-functions-to-fool-disassemblers/
 //int main(void) __attribute__((naked)); // w/o this it doesn't work when booted directly (no u-boot)
 
+void color(int);
+
 int main(void)
 {
     enableBranchPrediction();
@@ -21,7 +23,11 @@ int main(void)
   
     while (true)
     {
-        rgb();
+        for (int i = 0; i != 8; ++i)
+        {
+            color(i);
+            longDelay();
+        }
     }
 }
 
@@ -32,17 +38,22 @@ void init(int i)
     GPIO::off(i);
 }
 
-void onoff(int i)
+void color(int i)
 {
-    GPIO::on(i);
-    longDelay();
-    GPIO::off(i);
-    shortDelay();
-}
+    if (i % 2)
+        GPIO::on(17);
+    else
+        GPIO::off(17);
+    i = i >> 1;
 
-void rgb()
-{
-    onoff(17);
-    onoff(27);
-    onoff(22);
+    if (i % 2)
+        GPIO::on(27);
+    else
+        GPIO::off(27);
+    i = i >> 1;
+
+    if (i % 2)
+        GPIO::on(22);
+    else
+        GPIO::off(22);
 }
