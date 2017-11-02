@@ -21,8 +21,6 @@ int main(void)
     while (true)
     {
         rgb();
-        //longDelay();
-        //longDelay();
     }
 }
 
@@ -38,7 +36,7 @@ void onoff(int i)
     GPIO::on(i);
     longDelay();
     GPIO::off(i);
-    longDelay();
+    shortDelay();
 }
 
 void rgb()
