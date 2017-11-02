@@ -26,9 +26,8 @@ int main(void)
         for (int i = 0; i != 8; ++i)
         {
             color(i);
-            longDelay();
-            longDelay();
-            longDelay();
+            for (int m = 0; m != 60; ++m)
+                longDelay();
         }
     }
 }
