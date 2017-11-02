@@ -27,6 +27,8 @@ int main(void)
         {
             color(i);
             longDelay();
+            longDelay();
+            longDelay();
         }
     }
 }
