@@ -29,7 +29,7 @@ int main(void)
 void init(int i)
 {    
     GPIO::setMode(i, GPIO::Out);
-    GPIO::setPUD(i, GPIO::PullUp);
+    GPIO::setPUD(i, GPIO::PullOff);
     GPIO::off(i);
 }
 
@@ -38,6 +38,7 @@ void onoff(int i)
     GPIO::on(i);
     longDelay();
     GPIO::off(i);
+    longDelay();
 }
 
 void rgb()
