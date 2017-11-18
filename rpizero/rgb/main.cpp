@@ -27,9 +27,9 @@ int main(void)
         {
             color(i);
             //continue;
-            for (int m = 0; m != 1; ++m)
-                //longDelay();
-                shortDelay();
+            for (int m = 0; m != 3; ++m)
+                longDelay();
+                //shortDelay();
         }
     }
 }
