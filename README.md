@@ -1,7 +1,7 @@
 # baremetal
 
 
-Click here!
+Click here to see the demo video!
 [![RGB baremetal](rpizero/rip-zero-w-rgb.jpg)](https://youtu.be/p-kdCFDh3Sk "RGB baremetal")
 
 
