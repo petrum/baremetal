@@ -1,6 +1,6 @@
 # baremetal
 
-(https://youtu.be/p-kdCFDh3Sk)
+https://youtu.be/p-kdCFDh3Sk
 
 ![No moving parts design](rpizero/no-moving-parts.jpg)
 ![RGB pins](rpizero/rip-zero-w-rgb.jpg)
